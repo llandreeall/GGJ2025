@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool playerPaused;
     [SerializeField]
     private float speed;
     [SerializeField]
@@ -34,12 +35,13 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true;
         readyToJump = true;
+        playerPaused = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!gameplayManager.IsGameRunning()) return;
+        if (!gameplayManager.IsGameRunning() || playerPaused) return;
 
         onGround = Physics2D.Raycast(transform.position, Vector3.down, height, ground) ? true : false;
         //If UI window open, return
@@ -59,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!gameplayManager.IsGameRunning()) return;
+        if (!gameplayManager.IsGameRunning() || playerPaused) return;
         Move();
     }
 
@@ -115,5 +117,21 @@ public class PlayerController : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    public void PausePlayer(bool isPaused)
+    {
+        playerPaused = isPaused;
+        if (isPaused)
+        {
+            //Animate
+        }
+    }
+
+    public void ResetPlayer()
+    {
+        playerPaused = false;
+        ResetJump();
+        rb.velocity = new Vector2(0f, 0f);
     }
 }

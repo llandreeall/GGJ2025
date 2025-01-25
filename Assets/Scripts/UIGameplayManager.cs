@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UIGameplayManager : MonoBehaviour
 {
@@ -21,12 +22,13 @@ public class UIGameplayManager : MonoBehaviour
     private Coroutine initializationCoroutine = null;
     private int lastBubbleIDToPop;
 
-    public void InitializeUI()
+    public void InitializeUI(float sliderMaxVal)
     {
         isInBubbleCoroutine = false;
         if(initializationCoroutine == null)
             initializationCoroutine = StartCoroutine(InitializeUICoroutine());
         lastBubbleIDToPop = uiBubblesList.Count - 1;
+        ResetSlider(sliderMaxVal);
     }
 
     private IEnumerator InitializeUICoroutine()
@@ -74,5 +76,16 @@ public class UIGameplayManager : MonoBehaviour
         {
             lastBubbleIDToPop = uiBubblesList.Count - 1;
         }
+    }
+
+    public void UpdateProgressSlider(float val)
+    {
+        progressSlider.DOValue(val, TRANSITION_TIME);
+    }
+
+    public void ResetSlider(float maxValue)
+    {
+        progressSlider.value = 0;
+        progressSlider.maxValue = maxValue;
     }
 }

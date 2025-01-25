@@ -54,4 +54,13 @@ public class BubblesGenerator : MonoBehaviour
         }
         return pos;
     }
+
+    public void StopGenerator()
+    {
+        BubblesInteractable[] interactables = FindObjectsByType<BubblesInteractable>(FindObjectsSortMode.InstanceID);
+        for (int i = 0; i < interactables.Length; i++)
+        {
+            bubblesPool.ReturnToPool(interactables[i]);
+        }
+    }
 }
