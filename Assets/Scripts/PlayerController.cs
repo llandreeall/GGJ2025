@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
     private float airMultiplier;
     [SerializeField]
     private LayerMask ground;
+    [SerializeField]
+    private GameplayManager gameplayManager;
+    public float minX;
+    public float maxX;
 
     private bool onGround;
     private float hInput;
@@ -35,6 +39,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!gameplayManager.isGameRunning) return;
+
         onGround = Physics2D.Raycast(transform.position, Vector3.down, height, ground) ? true : false;
         //If UI window open, return
         //Process input
@@ -53,13 +59,13 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!gameplayManager.isGameRunning) return;
         Move();
     }
 
     private void GetInput()
     {
         hInput = Input.GetAxisRaw("Horizontal");
-
         //Animate player
 
         //Jump
@@ -82,6 +88,12 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(moveDir.normalized * speed * airMultiplier, ForceMode2D.Force);
         }
+        // Clamp the player's position to the min and max X boundaries
+        Vector2 clampedPosition = rb.position;
+        clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX, maxX);
+
+        // Update the Rigidbody's position
+        rb.position = clampedPosition;
     }
 
     private void SpeedControl()
