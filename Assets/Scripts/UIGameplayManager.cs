@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class UIGameplayManager : MonoBehaviour
 {
@@ -18,9 +19,25 @@ public class UIGameplayManager : MonoBehaviour
     private List<UIBubble> uiBubblesList;
     [SerializeField]
     private GameplayManager gameManager;
+    [SerializeField]
+    private UIPanel instructionsPanel;
+    [SerializeField]
+    private EndPanel endPanel;
 
     private Coroutine initializationCoroutine = null;
     private int lastBubbleIDToPop;
+
+    private void Awake()
+    {
+        instructionsPanel.onPanelClosed += gameManager.StartGame;
+    }
+
+    private void Start()
+    {
+        endPanel.PreparePopupButtons(() => {
+            StartCoroutine(ClickReplay());
+        }, () => { StartCoroutine(ClickNext()); });
+    }
 
     public void InitializeUI(float sliderMaxVal)
     {
@@ -88,4 +105,42 @@ public class UIGameplayManager : MonoBehaviour
         progressSlider.value = 0;
         progressSlider.maxValue = maxValue;
     }
+
+    public void ShowInstructions()
+    {
+        instructionsPanel.ShowPanel();
+    }
+
+    public IEnumerator ClickReplay()
+    {
+        gameManager.RestartGame();
+        endPanel.HidePanel();
+        yield return new WaitForSeconds(SHRINK_TIME);
+        gameManager.StartGame();
+    }
+
+    public IEnumerator ClickNext()
+    {
+        gameManager.RestartGame();
+        endPanel.exitBttn.gameObject.SetActive(false);
+        endPanel.exitBttn.gameObject.SetActive(false);
+        yield return new WaitForSeconds(SHRINK_TIME);
+        //Go to next scene
+        StartCoroutine(GlobalGameManager.Instance.DoTransition(TransitionDirection.IN, () =>
+        {
+            GlobalGameManager.Instance.gameWon = true;
+            SceneManager.LoadSceneAsync(GlobalGameManager.INTRO_SCENE_NAME);
+        }));
+    }
+
+    public void ShowEndPanel()
+    {
+        endPanel.ShowPanel();
+    }
+
+    public void PrepapeEndPanel(bool hasWon, float timeRecord)
+    {
+        endPanel.PreparePopupBeforeDisplay(hasWon, timeRecord);
+    }
+
 }

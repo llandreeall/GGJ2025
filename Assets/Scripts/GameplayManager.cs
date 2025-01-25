@@ -27,7 +27,11 @@ public class GameplayManager : MonoBehaviour
 
     private void Start()
     {
-        uiManager.InitializeUI(targetProgress);
+        StartCoroutine(GlobalGameManager.Instance.DoTransition(TransitionDirection.OUT, () =>
+        {
+            uiManager.InitializeUI(targetProgress);
+            uiManager.ShowInstructions();
+        }));
     }
 
     public void ResetGame()
@@ -40,10 +44,11 @@ public class GameplayManager : MonoBehaviour
     private void Update()
     {
         //Debug
+        /*
         if (Input.GetKeyDown(KeyCode.P))
             StartGame();
         if (Input.GetKeyDown(KeyCode.O))
-            RestartGame();
+            RestartGame();*/
 
         if (!isGameRunning) return;
 
@@ -56,6 +61,8 @@ public class GameplayManager : MonoBehaviour
             //Stop Game
             Debug.Log("LOSE GAME");
             StopGame();
+            uiManager.PrepapeEndPanel(false, 0);
+            uiManager.ShowEndPanel();
         }
         
     }
@@ -111,6 +118,8 @@ public class GameplayManager : MonoBehaviour
             //WIN
             Debug.Log("WIN GAME");
             StopGame();
+            uiManager.PrepapeEndPanel(true, 0);
+            uiManager.ShowEndPanel();
         }
     }
 
