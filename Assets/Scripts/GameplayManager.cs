@@ -8,8 +8,7 @@ public class GameplayManager : MonoBehaviour
     private bool isGameRunning;
     public BubblesGenerator bubblesGenerator;
     public RepairSubGenerator repairSubGenerator;
-    private Action onGameStart;
-    private Action onGameStop;
+    public EnemyGenerator enemyGenerator;
 
     [SerializeField] private float targetProgress;
     [SerializeField] private float targetOxygen;
@@ -71,6 +70,7 @@ public class GameplayManager : MonoBehaviour
     {
         isGameRunning = true;
         repairSubGenerator.StartGenerate();
+        enemyGenerator.StartGenerate();
     }
 
     public void StopGame()
@@ -78,6 +78,7 @@ public class GameplayManager : MonoBehaviour
         isGameRunning = false;
         repairSubGenerator.StopGenerator();
         bubblesGenerator.StopGenerator();
+        enemyGenerator.StopGenerator();
         player.ResetPlayer();
     }
 
@@ -87,6 +88,7 @@ public class GameplayManager : MonoBehaviour
         uiManager.InitializeUI(targetProgress);
         bubblesGenerator.ResetGenerator();
         repairSubGenerator.ResetGenerator();
+        enemyGenerator.ResetGenerator();
     }
 
     public bool IsGameRunning()
@@ -94,9 +96,9 @@ public class GameplayManager : MonoBehaviour
         return isGameRunning;
     }
 
-    public void AddOnStartAction(Action onStart)
+    public bool IsPlayerPaused()
     {
-        onGameStart += onStart;
+        return player.playerPaused;
     }
 
     public void AddBubble(int value)
@@ -126,5 +128,11 @@ public class GameplayManager : MonoBehaviour
     public void PausePlayer(bool isPaused)
     {
         player.PausePlayer(isPaused);
+    }
+
+    public void PlayerHit(int val)
+    {
+        currentOxygen -= val;
+        uiManager.SetBubblesAfterHit(currentOxygen);
     }
 }

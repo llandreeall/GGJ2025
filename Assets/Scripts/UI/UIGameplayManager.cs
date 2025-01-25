@@ -143,4 +143,15 @@ public class UIGameplayManager : MonoBehaviour
         endPanel.PreparePopupBeforeDisplay(hasWon, timeRecord);
     }
 
+    public void SetBubblesAfterHit(float oxygen)
+    {
+        for(int i = 0; i < uiBubblesList.Count; i++)
+        {
+            if(i + 1 > oxygen)
+            {
+                uiBubblesList[i].Pop();
+            }
+        }
+        lastBubbleIDToPop = Mathf.FloorToInt(oxygen + 1);
+    }
 }
