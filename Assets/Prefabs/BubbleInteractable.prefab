@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6459704527167045617}
   - component: {fileID: 9173026118677810041}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1549954038476023456}
   - component: {fileID: 1094995037348505525}
   - component: {fileID: 6209780936459386911}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4925,7 +4925,7 @@ GameObject:
   - component: {fileID: 884099517692055804}
   - component: {fileID: 5415628636381676133}
   - component: {fileID: 348207029133342318}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BubbleInteractable
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -4966,7 +4966,7 @@ MonoBehaviour:
   lifeTimer: 5
   mask:
     serializedVersion: 2
-    m_Bits: 23
+    m_Bits: 128
   bubbles: {fileID: 1094995037348505525}
 --- !u!61 &348207029133342318
 BoxCollider2D:

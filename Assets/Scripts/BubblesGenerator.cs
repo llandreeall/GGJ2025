@@ -23,7 +23,7 @@ public class BubblesGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (!gameplayManager.isGameRunning) return;
+        if (!gameplayManager.IsGameRunning()) return;
 
         //Generate bubbles
         bubblesGenerationTimer += Time.deltaTime;

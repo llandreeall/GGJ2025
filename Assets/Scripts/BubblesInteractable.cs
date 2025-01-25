@@ -19,12 +19,16 @@ public class BubblesInteractable : Interactable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if(collision.tag == "Player")
+        {
+            gameManager.AddBubble(increment);
+            StartCoroutine(DisableBubbles());
+        }
     }
 
     private void Update()
     {
-        if(timer >= 0 && gameManager.isGameRunning)
+        if(timer >= 0 && gameManager.IsGameRunning())
         {
             timer += Time.deltaTime;
             if(timer >= lifeTimer)
@@ -38,6 +42,8 @@ public class BubblesInteractable : Interactable
     private void OnEnable()
     {
         timer = -9999;
+        boxColl.enabled = true;
+        bubbles.Play();
     }
 
     public bool CheckOverlap(Vector2 position)

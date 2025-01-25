@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public float increment;
+    public int increment;
     public BoxCollider2D boxColl;
 }

@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameplayManager.isGameRunning) return;
+        if (!gameplayManager.IsGameRunning()) return;
 
         onGround = Physics2D.Raycast(transform.position, Vector3.down, height, ground) ? true : false;
         //If UI window open, return
@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!gameplayManager.isGameRunning) return;
+        if (!gameplayManager.IsGameRunning()) return;
         Move();
     }
 
