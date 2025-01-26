@@ -21,6 +21,13 @@ public class PlayerController : MonoBehaviour
     private LayerMask ground;
     [SerializeField]
     private GameplayManager gameplayManager;
+    [SerializeField]
+    private Animator playerAnim;
+    [SerializeField]
+    private GameObject repairIcon;
+    [SerializeField]
+    private ParticleSystem hitParticles;
+
     public float minX;
     public float maxX;
 
@@ -36,6 +43,8 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true;
         readyToJump = true;
         playerPaused = false;
+        playerAnim.SetFloat("velocityX", rb.velocity.x);
+        repairIcon.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -96,6 +105,7 @@ public class PlayerController : MonoBehaviour
 
         // Update the Rigidbody's position
         rb.position = clampedPosition;
+        playerAnim.SetFloat("velocityX", rb.velocity.x);
     }
 
     private void SpeedControl()
@@ -112,11 +122,13 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(rb.velocity.x, 0f);
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+        playerAnim.SetBool("jump", true);
     }
 
     private void ResetJump()
     {
         readyToJump = true;
+        playerAnim.SetBool("jump", false);
     }
 
     public void PausePlayer(bool isPaused)
@@ -125,7 +137,8 @@ public class PlayerController : MonoBehaviour
         if (isPaused)
         {
             //Animate
-        }
+            repairIcon.gameObject.SetActive(true);
+        } else repairIcon.gameObject.SetActive(false);
     }
 
     public void ResetPlayer()
@@ -133,5 +146,11 @@ public class PlayerController : MonoBehaviour
         playerPaused = false;
         ResetJump();
         rb.velocity = new Vector2(0f, 0f);
+        playerAnim.SetFloat("velocityX", rb.velocity.x);
+    }
+
+    public void HitParticles()
+    {
+        hitParticles.Play();
     }
 }

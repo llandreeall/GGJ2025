@@ -53,15 +53,13 @@ public class GameplayManager : MonoBehaviour
 
         currentOxygen -= Time.deltaTime * timeSpeed;
         //Update UI
-        uiManager.PopBubbleUI(Mathf.FloorToInt(currentOxygen+1));
+        uiManager.PopBubbleUI(currentOxygen+1);
         if(currentOxygen <= 0)
         {
             currentOxygen = 0;
             //Stop Game
             Debug.Log("LOSE GAME");
-            StopGame();
-            uiManager.PrepapeEndPanel(false, 0);
-            uiManager.ShowEndPanel();
+            StartCoroutine(LoseCoroutine());
         }
         
     }
@@ -107,7 +105,7 @@ public class GameplayManager : MonoBehaviour
         if (currentOxygen <= 0) return;
         currentOxygen += value;
         if (currentOxygen > targetOxygen) currentOxygen = targetOxygen;
-        uiManager.AddBubble(value);
+        uiManager.AddBubble(currentOxygen);
     }
 
     public void AddProgress(int val)
@@ -119,11 +117,28 @@ public class GameplayManager : MonoBehaviour
         {
             //WIN
             Debug.Log("WIN GAME");
-            StopGame();
-            uiManager.PrepapeEndPanel(true, 0);
-            uiManager.ShowEndPanel();
+            StartCoroutine(WinCoroutine());
         }
     }
+
+    IEnumerator WinCoroutine()
+    {
+        StopGame();
+        player.ResetPlayer();
+        yield return new WaitForSeconds(0.7f);
+        uiManager.PrepapeEndPanel(true, 0);
+        uiManager.ShowEndPanel();
+    }
+
+    IEnumerator LoseCoroutine()
+    {
+        StopGame();
+        player.ResetPlayer();
+        yield return new WaitForSeconds(0.7f);
+        uiManager.PrepapeEndPanel(false, 0);
+        uiManager.ShowEndPanel();
+    }
+
 
     public void PausePlayer(bool isPaused)
     {
@@ -133,6 +148,7 @@ public class GameplayManager : MonoBehaviour
     public void PlayerHit(int val)
     {
         currentOxygen -= val;
+        player.HitParticles();
         uiManager.SetBubblesAfterHit(currentOxygen);
     }
 }

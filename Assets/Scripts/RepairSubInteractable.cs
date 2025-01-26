@@ -36,8 +36,8 @@ public class RepairSubInteractable : Interactable
     {
         boxColl.enabled = false;
         gameManager.PausePlayer(true);
-        gameManager.AddProgress(increment);
         yield return new WaitForSeconds(repairTime);
+        gameManager.AddProgress(increment);
         DisableRepairSub();
         gameManager.PausePlayer(false);
     }

@@ -11,6 +11,11 @@ public class EnemyInteractable : Interactable
     private GameplayManager gameManager;
     private Vector3 direction = Vector3.left;
     private bool isRunning;
+    Vector3 artScale;
+    private void Awake()
+    {
+        artScale = art.localScale;
+    }
     public void InitializeEnemy(GameplayManager manager)
     {
         gameManager = manager;
@@ -53,8 +58,16 @@ public class EnemyInteractable : Interactable
     public void SetDirection()
     {
         float x = transform.position.x;
-        if (x > 0) direction = Vector3.left;
-        else direction = Vector3.right;
+        if (x > 0)
+        {
+            direction = Vector3.left;
+            art.localScale = new Vector3(-artScale.x, artScale.y, artScale.z);
+        }
+        else
+        {
+            direction = Vector3.right;
+            art.localScale = new Vector3(artScale.x, artScale.y, artScale.z);
+        }
         isRunning = true;
     }
 

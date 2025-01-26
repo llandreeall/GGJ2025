@@ -60,8 +60,9 @@ public class UIGameplayManager : MonoBehaviour
         isInBubbleCoroutine = false;
     }
 
-    public void PopBubbleUI(float id)
+    public void PopBubbleUI(float value)
     {
+        /*
         if (id > lastBubbleIDToPop)
         {
             for(int i = lastBubbleIDToPop + 1; i < id; i++)
@@ -76,11 +77,27 @@ public class UIGameplayManager : MonoBehaviour
                 uiBubblesList[lastBubbleIDToPop].Pop();
                 lastBubbleIDToPop--;
             }
+        }*/
+        for (int i = 0; i < uiBubblesList.Count; i++)
+        {
+            if (i + 1 > value)
+            {
+                uiBubblesList[i].Pop();
+            }
+            else
+            {
+                uiBubblesList[i].ResetFast();
+            }
         }
+        lastBubbleIDToPop = Mathf.FloorToInt(value - 1);
+
     }
 
-    public void AddBubble(int value)
+    public void AddBubble(float value)
     {
+        Debug.Log("addBubble");
+        Debug.Log(value + " " + lastBubbleIDToPop);
+        /*
         for (int i = 0; i < value; i++)
         {
             if (lastBubbleIDToPop <= uiBubblesList.Count - 1)
@@ -92,7 +109,20 @@ public class UIGameplayManager : MonoBehaviour
         if(lastBubbleIDToPop > uiBubblesList.Count - 1)
         {
             lastBubbleIDToPop = uiBubblesList.Count - 1;
+        }*/
+        for (int i = 0; i < uiBubblesList.Count; i++)
+        {
+            if (i + 1 > value)
+            {
+                uiBubblesList[i].Pop();
+            } else
+            {
+                uiBubblesList[i].ResetFast();
+            }
         }
+        lastBubbleIDToPop = Mathf.FloorToInt(value-1);
+        
+        Debug.Log(value + " " + lastBubbleIDToPop);
     }
 
     public void UpdateProgressSlider(float val)
@@ -123,7 +153,7 @@ public class UIGameplayManager : MonoBehaviour
     {
         gameManager.RestartGame();
         endPanel.exitBttn.gameObject.SetActive(false);
-        endPanel.exitBttn.gameObject.SetActive(false);
+        endPanel.replayBttn.gameObject.SetActive(false);
         yield return new WaitForSeconds(SHRINK_TIME);
         //Go to next scene
         StartCoroutine(GlobalGameManager.Instance.DoTransition(TransitionDirection.IN, () =>
