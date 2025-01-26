@@ -15,11 +15,13 @@ public class UIBubble : MonoBehaviour
 
     public void Initialize()
     {
+        uiBubble.localScale = Vector3.zero;
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.BubblePop);
         uiBubble.DOScale(Vector3.one, UIGameplayManager.TRANSITION_TIME);
         isPopped = false;
     }
 
-    public void ResetFast()
+    public void Inflate()
     {
         uiBubble.localScale = Vector3.one;
         isPopped = false;

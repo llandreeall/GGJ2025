@@ -36,6 +36,7 @@ public class RepairSubInteractable : Interactable
     {
         boxColl.enabled = false;
         gameManager.PausePlayer(true);
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.PlayerStartFix);
         yield return new WaitForSeconds(repairTime);
         gameManager.AddProgress(increment);
         DisableRepairSub();

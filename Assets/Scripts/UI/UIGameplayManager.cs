@@ -25,7 +25,6 @@ public class UIGameplayManager : MonoBehaviour
     private EndPanel endPanel;
 
     private Coroutine initializationCoroutine = null;
-    private int lastBubbleIDToPop;
 
     private void Awake()
     {
@@ -44,7 +43,7 @@ public class UIGameplayManager : MonoBehaviour
         isInBubbleCoroutine = false;
         if(initializationCoroutine == null)
             initializationCoroutine = StartCoroutine(InitializeUICoroutine());
-        lastBubbleIDToPop = uiBubblesList.Count - 1;
+        
         ResetSlider(sliderMaxVal);
     }
 
@@ -60,69 +59,19 @@ public class UIGameplayManager : MonoBehaviour
         isInBubbleCoroutine = false;
     }
 
-    public void PopBubbleUI(float value)
+    public void SetBubbleStatus(float oxygen)
     {
-        /*
-        if (id > lastBubbleIDToPop)
-        {
-            for(int i = lastBubbleIDToPop + 1; i < id; i++)
-            {
-                uiBubblesList[i].Pop();
-            }
-        }
-        else if (id == lastBubbleIDToPop)
-        {
-            if (lastBubbleIDToPop >= 0 && lastBubbleIDToPop <= uiBubblesList.Count - 1)
-            {
-                uiBubblesList[lastBubbleIDToPop].Pop();
-                lastBubbleIDToPop--;
-            }
-        }*/
         for (int i = 0; i < uiBubblesList.Count; i++)
         {
-            if (i + 1 > value)
+            if (i > oxygen - 1)
             {
                 uiBubblesList[i].Pop();
             }
             else
             {
-                uiBubblesList[i].ResetFast();
+                uiBubblesList[i].Inflate();
             }
         }
-        lastBubbleIDToPop = Mathf.FloorToInt(value - 1);
-
-    }
-
-    public void AddBubble(float value)
-    {
-        Debug.Log("addBubble");
-        Debug.Log(value + " " + lastBubbleIDToPop);
-        /*
-        for (int i = 0; i < value; i++)
-        {
-            if (lastBubbleIDToPop <= uiBubblesList.Count - 1)
-            {
-                uiBubblesList[lastBubbleIDToPop].ResetFast();
-                lastBubbleIDToPop++;
-            }
-        }
-        if(lastBubbleIDToPop > uiBubblesList.Count - 1)
-        {
-            lastBubbleIDToPop = uiBubblesList.Count - 1;
-        }*/
-        for (int i = 0; i < uiBubblesList.Count; i++)
-        {
-            if (i + 1 > value)
-            {
-                uiBubblesList[i].Pop();
-            } else
-            {
-                uiBubblesList[i].ResetFast();
-            }
-        }
-        lastBubbleIDToPop = Mathf.FloorToInt(value-1);
-        
-        Debug.Log(value + " " + lastBubbleIDToPop);
     }
 
     public void UpdateProgressSlider(float val)
@@ -143,14 +92,20 @@ public class UIGameplayManager : MonoBehaviour
 
     public IEnumerator ClickReplay()
     {
+        for (int i = 0; i < uiBubblesList.Count; i++)
+        {
+            uiBubblesList[i].Pop();
+        }
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.UI_Bttn);
         gameManager.RestartGame();
         endPanel.HidePanel();
-        yield return new WaitForSeconds(SHRINK_TIME);
+        yield return StartCoroutine(InitializeUICoroutine());
         gameManager.StartGame();
     }
 
     public IEnumerator ClickNext()
     {
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.UI_Bttn);
         gameManager.RestartGame();
         endPanel.exitBttn.gameObject.SetActive(false);
         endPanel.replayBttn.gameObject.SetActive(false);
@@ -182,6 +137,5 @@ public class UIGameplayManager : MonoBehaviour
                 uiBubblesList[i].Pop();
             }
         }
-        lastBubbleIDToPop = Mathf.FloorToInt(oxygen + 1);
     }
 }

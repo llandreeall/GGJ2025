@@ -19,6 +19,7 @@ public class GlobalGameManager : Singleton<GlobalGameManager>
 
     public float bestTime;
     public bool gameWon;
+    public SoundManager soundManager;
     [SerializeField] private Image transitionPanel;
     [SerializeField] private float transitionTime = 0.5f;
 

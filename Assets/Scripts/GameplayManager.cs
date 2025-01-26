@@ -53,12 +53,13 @@ public class GameplayManager : MonoBehaviour
 
         currentOxygen -= Time.deltaTime * timeSpeed;
         //Update UI
-        uiManager.PopBubbleUI(currentOxygen+1);
+        uiManager.SetBubbleStatus(currentOxygen+1);
         if(currentOxygen <= 0)
         {
             currentOxygen = 0;
             //Stop Game
             Debug.Log("LOSE GAME");
+            GlobalGameManager.Instance.soundManager.PlaySound(SFXType.UI_Lose);
             StartCoroutine(LoseCoroutine());
         }
         
@@ -105,11 +106,12 @@ public class GameplayManager : MonoBehaviour
         if (currentOxygen <= 0) return;
         currentOxygen += value;
         if (currentOxygen > targetOxygen) currentOxygen = targetOxygen;
-        uiManager.AddBubble(currentOxygen);
+        uiManager.SetBubbleStatus(currentOxygen);
     }
 
     public void AddProgress(int val)
     {
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.PlayerAddProgress);
         currentProgress = currentProgress + val >= targetProgress ? targetProgress : currentProgress + val;
         uiManager.UpdateProgressSlider(currentProgress);
         repairSubGenerator.StartGenerate();
@@ -117,6 +119,7 @@ public class GameplayManager : MonoBehaviour
         {
             //WIN
             Debug.Log("WIN GAME");
+            GlobalGameManager.Instance.soundManager.PlaySound(SFXType.UI_Win);
             StartCoroutine(WinCoroutine());
         }
     }
@@ -147,6 +150,7 @@ public class GameplayManager : MonoBehaviour
 
     public void PlayerHit(int val)
     {
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.PlayerHit);
         currentOxygen -= val;
         player.HitParticles();
         uiManager.SetBubblesAfterHit(currentOxygen);

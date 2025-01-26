@@ -24,12 +24,17 @@ public class UIPanel : MonoBehaviour
         if (closeBttn != null)
         {
             closeBttn.onClick.RemoveAllListeners();
-            closeBttn.onClick.AddListener(HidePanel);
+            closeBttn.onClick.AddListener(() =>
+            {
+                GlobalGameManager.Instance.soundManager.PlaySound(SFXType.UI_Bttn);
+                HidePanel();
+            });
         }
     }
 
     public void ShowPanel()
     {
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.UI_Popup);
         inAnimation = true;
         objParent.SetActive(true);
         Sequence seq = DOTween.Sequence();
@@ -46,6 +51,7 @@ public class UIPanel : MonoBehaviour
 
     public void HidePanel()
     {
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.UI_Popup);
         inAnimation = true;
         objParent.SetActive(true);
         window.DOScale(Vector3.zero, UIGameplayManager.SHRINK_TIME).OnComplete(() => {

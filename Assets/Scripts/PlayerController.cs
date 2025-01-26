@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(rb.velocity.x, 0f);
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.PlayerJump);
         playerAnim.SetBool("jump", true);
     }
 
@@ -147,6 +148,8 @@ public class PlayerController : MonoBehaviour
         ResetJump();
         rb.velocity = new Vector2(0f, 0f);
         playerAnim.SetFloat("velocityX", rb.velocity.x);
+        repairIcon.SetActive(false);
+        hitParticles.Stop();
     }
 
     public void HitParticles()

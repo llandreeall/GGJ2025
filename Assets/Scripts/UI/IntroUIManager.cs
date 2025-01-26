@@ -27,4 +27,14 @@ public class IntroUIManager : MonoBehaviour
         }));
     }
 
+    public void PlayCrashSFX()
+    {
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.SubmarineCrash);
+    }
+
+    public void PlayRecoverSFX()
+    {
+        GlobalGameManager.Instance.soundManager.PlaySound(SFXType.SubmarineRecover);
+    }
+
 }

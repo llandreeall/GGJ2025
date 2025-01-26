@@ -20,6 +20,7 @@ public class BubblesInteractable : Interactable
     {
         if(collision.tag == "Player")
         {
+            GlobalGameManager.Instance.soundManager.PlaySound(SFXType.PlayerTakeBubbles);
             gameManager.AddBubble(increment);
             StartCoroutine(DisableBubbles());
         }
